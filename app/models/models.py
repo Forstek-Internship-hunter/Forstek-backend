@@ -28,9 +28,9 @@ class UserProfile(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(255))
-    speciality = Column(String(255))  # ex: Cloud, DevOps, FullStack
-    skills = Column(Text)             # ex: Docker, Kubernetes, Angular
-    stage_type = Column(String(100))  # "pfe", "ete", "both"
-    location = Column(String(255))    # ex: Tunis, Remote, Both
-    languages = Column(String(100))   # "fr", "en", "both"
+    speciality = Column(String(255))
+    skills = Column(Text)
+    stage_type = Column(String(100))
+    location = Column(String(255))
+    languages = Column(String(100))
     created_at = Column(DateTime, default=func.now())

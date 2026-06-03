@@ -1,5 +1,5 @@
 import asyncio
-from app.scrapers.linkedin import scrape_linkedin, save_offers
+from app.scrapers.tanitjobs import scrape_tanitjobs, save_offers
 from app.models.models import UserProfile
 
 profile = UserProfile(
@@ -12,8 +12,8 @@ profile = UserProfile(
 )
 
 async def main():
-    print("Scraping LinkedIn...")
-    offers = await scrape_linkedin(profile)
+    print("Scraping Tanitjobs...")
+    offers = await scrape_tanitjobs(profile)
     for o in offers[:3]:
         print(o)
     save_offers(offers)
