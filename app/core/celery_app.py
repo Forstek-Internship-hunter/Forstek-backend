@@ -5,7 +5,7 @@ celery_app = Celery(
     "forstek",
     broker=settings.REDIS_URL,
     backend=settings.REDIS_URL,
-    include=["app.tasks"]
+    include=["app.tasks", "app.tasks.scraping"]
 )
 
 celery_app.conf.timezone = "Africa/Tunis"
