@@ -25,6 +25,12 @@ def scrape_linkedin_task(user_id: int):
 
         save_offers(offers)
         print(f"scrape_linkedin_task(user_id={user_id}): {len(offers)} offers found")
+
+        # Chain: automatically generate cover letters for new offers
+        from app.tasks.ai_tasks import generate_letters_task
+        generate_letters_task.delay(user_id)
+        print(f"Chained generate_letters_task for user_id={user_id}")
+
         return len(offers)
     finally:
         db.close()

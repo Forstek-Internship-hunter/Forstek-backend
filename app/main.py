@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.core.database import engine
 from app.models.models import Base
 from app.api.scraping import router as scraping_router
+from app.api.applications import router as applications_router
 from app.tasks.scheduler import start_scheduler, stop_scheduler
 
 
@@ -16,6 +17,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Forstek API", lifespan=lifespan)
 
 app.include_router(scraping_router)
+app.include_router(applications_router)
 
 
 @app.get("/")
