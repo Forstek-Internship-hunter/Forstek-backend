@@ -16,19 +16,22 @@ def generate_letters_task(user_id: int):
     """
     db = SessionLocal()
     try:
-        profile = db.query(UserProfile).filter(UserProfile.id == user_id).first()
+        profile = db.query(UserProfile).filter(UserProfile.user_id == user_id).first()
         if not profile:
             print(f"UserProfile {user_id} not found")
             return 0
 
-        # Find all offer IDs that already have an application
+        # Find all offer IDs that already have an application for this user
         existing_offer_ids = (
-            db.query(Application.offer_id).all()
+            db.query(Application.offer_id).filter(Application.user_id == user_id).all()
         )
         existing_ids = {row[0] for row in existing_offer_ids}
 
-        # Get offers without applications
-        offers = db.query(Offer).filter(Offer.id.notin_(existing_ids)).all() if existing_ids else db.query(Offer).all()
+        # Get offers for this user without applications
+        query = db.query(Offer).filter(Offer.user_id == user_id)
+        if existing_ids:
+            query = query.filter(Offer.id.notin_(existing_ids))
+        offers = query.all()
 
         count = 0
         for offer in offers:
@@ -36,10 +39,12 @@ def generate_letters_task(user_id: int):
                 cover_letter = generate_cover_letter(offer, profile)
 
                 application = Application(
+                    user_id=user_id,
                     offer_id=offer.id,
                     cover_letter=cover_letter,
                     status="pending",
                 )
+
                 db.add(application)
                 db.commit()
                 count += 1

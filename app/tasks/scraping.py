@@ -10,7 +10,7 @@ def scrape_linkedin_task(user_id: int):
     """Celery task that scrapes LinkedIn internship offers for a given user."""
     db = SessionLocal()
     try:
-        profile = db.query(UserProfile).filter(UserProfile.id == user_id).first()
+        profile = db.query(UserProfile).filter(UserProfile.user_id == user_id).first()
         if not profile:
             print(f"UserProfile {user_id} not found")
             return 0
@@ -23,7 +23,8 @@ def scrape_linkedin_task(user_id: int):
         finally:
             loop.close()
 
-        save_offers(offers)
+        save_offers(offers, user_id)
+
         print(f"scrape_linkedin_task(user_id={user_id}): {len(offers)} offers found")
 
         # Chain: automatically generate cover letters for new offers
